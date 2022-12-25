@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        font-family: Inter;
+        padding: 0px;
+        margin: 0px;
+        font-size: 12px;
+      }
+      html {
+        background: #ffffff;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+        gap: 12px;
+      }
+      .row {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+      }
+      .link > a:first-child {
+        font-size: 9px;
+        color: #888888;
+      }
+      button {
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        background: linear-gradient(#f5f5f5, #dadada);
+        color: #414141;
+        padding: 6px 16px;
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 1);
+        transition: box-shadow 0.2s cubic-bezier(0.61, 1, 0.88, 1);
+      }
+      button:hover {
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 1),
+          0px 4px 6px 0px rgba(0, 0, 0, 0.1);
+      }
+      button:active {
+        box-shadow: inset 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
+      }
+      input {
+        border-radius: 4px;
+        padding: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.2s cubic-bezier(0.61, 1, 0.88, 1);
+      }
+      input:focus {
+        border-color: rgba(0, 0, 0, 0.3);
+        outline: none;
+        box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.1),
+          0px 4px 6px 0px rgba(0, 0, 0, 0.1);
+      }
+      .link {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+        padding: 4px 8px;
+        gap: 4px;
+
+        border-radius: 4px;
+        background: #f7f7f7;
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.3),
+          inset 0px -4px 8px 0px rgba(0, 0, 0, 0.05);
+        transition: background 0.2s cubic-bezier(0.61, 1, 0.88, 1);
+      }
+      .link > a {
+        text-decoration: none;
+        color: rgb(27, 120, 182);
+        transition: color 0.2s cubic-bezier(0.61, 1, 0.88, 1);
+        transition: box-shadow 0.2s cubic-bezier(0.61, 1, 0.88, 1);
+      }
+      .link:hover > a {
+        color: white;
+      }
+      .link:hover {
+        background: rgb(27, 120, 182);
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.3),
+          inset 0px -4px 8px 0px rgba(0, 0, 0, 0.05),
+          0px 4px 6px 0px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      'use strict'
+      async function post(url, json) {
+        return await (
+          await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(json),
+          })
+        ).json()
+      }
+      const input = document.createElement('input')
+      const button = document.createElement('button')
+      const div = document.createElement('div')
+      const links = document.createElement('div')
+      links.classList.add('row', 'links')
+      div.append(input, button)
+      div.classList.add('row')
+      document.body.append(div, links)
+      button.textContent = 'Shorten'
+      button.onclick = async () => {
+        const url = input.value
+        const res = await post('/', { url: url })
+        const div = document.createElement('div')
+        div.classList.add('col', 'link')
+        const original = document.createElement('a')
+        original.href = url
+        original.textContent = url
+        const anchor = document.createElement('a')
+        const link = `${location.href}${res.hash}`
+        anchor.href = link
+        anchor.textContent = link
+        div.append(original, anchor)
+        links.append(div)
+      }
+    </script>
+  </body>
+</html>
